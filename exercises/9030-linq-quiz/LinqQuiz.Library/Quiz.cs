@@ -16,7 +16,12 @@ namespace LinqQuiz.Library
         /// </exception>
         public static int[] GetEvenNumbers(int exclusiveUpperLimit)
         {
-            throw new NotImplementedException();
+            if (exclusiveUpperLimit < 1) { throw new ArgumentOutOfRangeException(); }
+            int i = 0;
+            return new int[exclusiveUpperLimit-1].ToList().Select(x => { 
+                i++;
+                    return i;
+                }).Where(x=>x%2==0).ToArray();
         }
 
         /// <summary>
@@ -33,7 +38,14 @@ namespace LinqQuiz.Library
         /// </remarks>
         public static int[] GetSquares(int exclusiveUpperLimit)
         {
-            throw new NotImplementedException();
+                Console.WriteLine("gg");
+            if(((double) exclusiveUpperLimit*(double )exclusiveUpperLimit) >=int.MaxValue) {
+                throw new OverflowException(); }    
+            if (exclusiveUpperLimit < 1) { return new int[0]; }
+            return new int[exclusiveUpperLimit - 1].ToList().Select(x => {
+                exclusiveUpperLimit--;
+                return exclusiveUpperLimit;
+            }).Where(x => x % 7 == 0).Select(x => x*x).ToArray();
         }
 
         /// <summary>
@@ -52,7 +64,9 @@ namespace LinqQuiz.Library
         /// </remarks>
         public static FamilySummary[] GetFamilyStatistic(IReadOnlyCollection<IFamily> families)
         {
-            throw new NotImplementedException();
+            if (families == null) { throw new ArgumentNullException(); }
+            return families.
+                Select(family => new FamilySummary() { FamilyID = family.ID, NumberOfFamilyMembers = family.Persons.Count(), AverageAge = family.Persons.Count()==0?0: family.Persons.Average(p=>p.Age) }).ToArray();  
         }
 
         /// <summary>
@@ -70,7 +84,7 @@ namespace LinqQuiz.Library
         /// </remarks>
         public static (char letter, int numberOfOccurrences)[] GetLetterStatistic(string text)
         {
-            throw new NotImplementedException();
+            return text.Where(word=>Char.IsLetterOrDigit(word)&&!Char.IsNumber(word)).GroupBy(word => word).Select(group=>(group.Key,group.Count())).ToArray();
         }
     }
 }
